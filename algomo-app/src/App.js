@@ -5,7 +5,6 @@ function App() {
     <div className="App">
       <header className="App-header">
         <InputField></InputField>
-        {/* <PersonList /> */}
       </header>
     </div>
   );

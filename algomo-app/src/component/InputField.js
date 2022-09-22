@@ -3,14 +3,12 @@ import "./InputField.css";
 import DisneyMarvelAPI from "../logic/DisneyMarvelAPI";
 
 class InputField extends Component {
-  // const [textInput, setTextInput] = useState("");
-  // const [isAnonymous, setIsAnoymous] = useState(true);
-
   state = {
     textInput: "",
     isAnonymous: true,
     marvelNames: [],
     marvelNamesTotalResults: 0,
+    isClickedDropDown: false,
   };
 
   // componentDidMount() {
@@ -31,42 +29,34 @@ class InputField extends Component {
     });
   };
 
-  handleButtonDisableStatus = (event) => {
+  handleOnChangeSearchbar = (event) => {
     var typed = event.target.value;
 
-    // DisneyMarvelAPI.getCharacterByNameStart(typed).then((res) => {
-    //   this.setState({ marvelNames: res["data"]["data"]["results"] });
-    // });
-    // console.log(typed);
-    // console.log(this.state.marvelNamesTotalResults + "total");
-
-    this.setState({ textInput: typed }); //setTextInput(typed);
-    // event.currentTarget.disabled = true;
+    //Setting state for the text that is inputted in the search bar
+    this.setState({ textInput: typed });
+    //Gets Marvel Names after 2 characters have been written
     if (typed.length > 1) {
       this.handleNameRetrival(typed);
+      this.setState({ isClickedDropDown: false });
     }
+    //Identifies if text is written inside or not which controls button able/disable status and clears Marvel Names
     if (typed.length > 0) {
-      this.setState({ isAnonymous: false, marvelNames: [] }); //setIsAnoymous(false);
+      this.setState({ isAnonymous: false, marvelNames: [] });
     } else {
-      this.setState({ isAnonymous: true }); //setIsAnoymous(true);
-    }
-    console.log("Input typed " + typed + " " + typed.length);
-
-    console.log(typeof this.state.marvelNames);
-    for (let i = 0; i < this.state.marvelNames.length; i++) {
-      console.log("marvelname " + i + " " + this.state.marvelNames[i]["name"]);
+      this.setState({ isAnonymous: true });
     }
   };
-
+  //When suggestion dropdown is selected , it will populate the searchbar with that option
+  // it also is able to clear dropdown list if an option is selected
   onClickPopulate = (searchTerm) => {
-    this.setState({ textInput: searchTerm });
+    this.setState({ textInput: searchTerm, isClickedDropDown: true });
     console.log("search ", searchTerm);
   };
 
   render() {
     return (
       <div>
-        <h4 className="text">Search{/*this.state.textInput*/}</h4>
+        <h4 className="text">Search</h4>
         <div className="flexthiscol">
           <div className="containersearchdrop">
             <input
@@ -79,7 +69,7 @@ class InputField extends Component {
               placeholder="Search terms"
               value={this.state.textInput}
               size="35"
-              onChange={(event) => this.handleButtonDisableStatus(event)}
+              onChange={(event) => this.handleOnChangeSearchbar(event)}
             ></input>
 
             <div className="dropdown">
@@ -92,10 +82,11 @@ class InputField extends Component {
                   return (
                     searchTerm &&
                     fullName.startsWith(searchTerm) &&
-                    fullName !== searchTerm
+                    fullName !== searchTerm &&
+                    !this.state.isClickedDropDown
                   );
                 })
-                .slice(0, 5)
+                .slice(0, 5) //Shows only first 5 results
                 .map((item) => (
                   <div
                     onClick={() => this.onClickPopulate(item["name"])}
@@ -108,12 +99,14 @@ class InputField extends Component {
             </div>
           </div>
 
-          {/* disbaled color #fcf0bd */}
           <button
             className={
               !this.state.isAnonymous ? "submitbutton" : "disablesubmitbutton"
             }
             disabled={this.state.isAnonymous ? true : false}
+            onClick={() => {
+              console.log("button pressed");
+            }}
           >
             SEARCH
           </button>

@@ -24,7 +24,7 @@ class DisneyMarvelAPI {
       MARVEL_API_PUBLIC_KEY +
       "&hash=" +
       hash;
-    return axios.get(url); //https://gateway.marvel.com:443/v1/public/comics/
+    return axios.get(url);
   }
   async getCharacterByNameStart(nameStart) {
     const ts = Date.now().toString();
@@ -40,7 +40,7 @@ class DisneyMarvelAPI {
       MARVEL_API_PUBLIC_KEY +
       "&hash=" +
       hash;
-    return await axios.get(url); //https://gateway.marvel.com:443/v1/public/comics/
+    return await axios.get(url);
   }
 }
 
